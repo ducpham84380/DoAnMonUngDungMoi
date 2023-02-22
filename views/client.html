@@ -1,12 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+    </script>
+    <style>
+        h3 {
+            background: #00fb00;
+            margin-top: 0;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .online_list,
+        .content {
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 10px;
+            height: 300px;
+        }
+        .content{
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
+
 <body>
-    
+
+    <div class="jumbotron text-center">
+        <h1>Ứng dụng chát (<span id="server_name" style="font-size: 16px;color: red;"></span>)</h1>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>Danh sách online </h3>
+                <div class="online_list">
+                    <ul></ul>
+                </div>
+
+                <!-- <div class="form-group">
+                    <label for="key">Nhập Từ khóa:</label>
+                    <input type="text" class="form-control" id="key">
+                </div>
+                <button type="button" onclick="send()" class="btn btn-default">Gửi</button> -->
+            </div>
+            <div class="col-sm-8">
+                <div class="content">
+                    <ul></ul>
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Nhập từ khóa" id="key">
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" onclick="send()" type="button">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function send() {
+            var key = radio = error = '', flag = 1;
+
+            key = $('#key').val();
+            radio = $('input[name=chat_radio]:checked').val();
+
+            var obj = {key, radio};
+
+            if (key.trim() == '') {
+                flag = 0;
+                error = 'Vui lòng nhập dữ liệu';
+            }
+
+            if (flag == 1) {
+                // gửi dữ liệu qua server
+                socket.emit('client', obj);
+            } else {
+                alert(error);
+            }
+
+            $('#key').val('')
+        }
+
+        socket.on('server', (data) => {
+            var text = data.key;
+            var id = data.id;
+
+            $('.content ul').append(`
+                <li><u>`+ id +`</u> : <b>`+ text +`</b></li>
+            `)
+        })
+
+        // nhận danh sách từ server
+        socket.on('online_list', (data)=>{
+            var str='';
+
+            data.forEach(element => {
+                str+= '<li><label for="radio_'+element+'">'+ element + '</label> ';
+                str+= '<input type="radio" name="chat_radio" value="'+element+'" id="radio_'+element+'">';
+                str+= '</li>';
+            });
+
+            $('.online_list ul').html(str)
+        });
+
+        // nhận tên từ server
+        socket.on('name', (data)=>{
+            $('#server_name').text(data)
+        })
+
+        // nhận gửi cho chính họ
+        socket.on('server-only', (data)=>{
+            var text = data.key;
+            var id = data.id;
+
+            $('.content ul').append(`
+                <li><i>`+ id +`</i> : <b>`+ text +`</b></li>
+            `)
+        })
+    </script>
+
 </body>
+
 </html>
