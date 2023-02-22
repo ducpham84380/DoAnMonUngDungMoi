@@ -13,6 +13,10 @@ server.listen(3000);
 
 io.on("connection",function(socket){
     console.log("new connection"+ socket.id);
+    // thêm người online vào mảng
+    array.push(socket.id);
+    // Gửi tên của chính người đó ra ngoài
+    socket.emit('name', socket.id);
 });
 
 var bodyParser = require("body-parser");
