@@ -8,8 +8,8 @@
     },
     "mongoose":{
         "server":"cluster0.a8gqm.mongodb.net",
-        "username":"narutobaco",
-        "password":"bSUyMWJwfQIOMGiX",
-        "dbname":"narutobaco_002"
+        "username":"sasuke",
+        "password":"3ruDnC0CuSNFCI8K",
+        "dbname":"sasuke_01"
     }
 }
