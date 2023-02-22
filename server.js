@@ -74,9 +74,7 @@ fs.readFile("./config.json", "utf8", function(err, data){
         }
     });
     // 
-    
+    require("./routes/client")(app);
 });
 
-app.get('/', (req, res) => {
-    res.sendFile( __dirname + '/views/client.html' )
-})
+
