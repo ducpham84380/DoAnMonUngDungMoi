@@ -43,10 +43,9 @@ io.on("connection",function(socket){
 
     // ngắt kết
     socket.on('disconnect', ()=>{
-        console.log('Đã thoát : ' + socket.id)
-
+        console.log('Đã thoát : ' + socket.id);
         // Xóa người logout
-        array.splice(array.indexOf(socket.id), 1)
+        array.splice(array.indexOf(socket.id), 1);
     })
 
     // Gửi danh sách ra cho tất cả
@@ -59,7 +58,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 fs.readFile("./config.json", "utf8", function(err, data){
     if(err){ throw err };
     var obj = JSON.parse(data);
-    //mongodb+srv://<username>:<password>@cluster0.a8gqm.mongodb.net/?retryWrites=true&w=majority
+    //mongodb+srv://GameUngDung:6waLDDs8WZ6Ye49F@cluster0.a8gqm.mongodb.net/?retryWrites=true&w=majority
     // kết nối CSDL mongooseDB
     const mongoose = require('mongoose');
     mongoose.set('strictQuery', false);
