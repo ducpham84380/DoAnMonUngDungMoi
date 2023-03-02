@@ -74,7 +74,6 @@
         $(document).ready(function(){
             var url = "http://localhost:3000";
 
-            $.get(url +"/", function(data){
                 $.get(url +"/home", function(data2){
                     if(data2.kq==1){
                         data2.productList.forEach(function(product){
