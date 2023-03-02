@@ -55,7 +55,7 @@
                 <button type="button" onclick="send()" class="btn btn-default">Gửi</button> -->
             </div>
             <div class="col-sm-8">
-                <div class="content">
+                <div class="content" id="bang">
                     <ul></ul>
                 </div>
                 <div class="input-group">
@@ -71,6 +71,21 @@
     </div>
 
     <script>
+        $(document).ready(function(){
+            var url = "http://localhost:3000";
+
+            $.get(url +"/", function(data){
+                $.get(url +"/home", function(data2){
+                    if(data2.kq==1){
+                        data2.productList.forEach(function(product){
+                            console.log(product);
+                            
+                        });
+                    }    
+                })
+            });
+        });
+
         function send() {
             var key = radio = error = '', flag = 1;
 

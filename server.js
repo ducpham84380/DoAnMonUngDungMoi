@@ -73,7 +73,8 @@ fs.readFile("./config.json", "utf8", function(err, data){
         }
     });
     // 
-    require("./routes/client")(app);
+   
+    require("./routes/product")(app);
 });
 
 
