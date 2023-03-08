@@ -74,7 +74,7 @@ fs.readFile("./config.json", "utf8", function(err, data){
     });
     // 
    
-    require("./routes/product")(app);
+    require("./routes/game")(app);
 });
 
 
