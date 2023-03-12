@@ -1,13 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game 3D Chrome Dinosaur Game </title>
-  <link rel="stylesheet" href="/public/css/style.css">
-</head>
-<body>
-  
-</body>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+    <script src="/socket.io/socket.io.js"></script>
+		<style>
+			body { margin: 0; }
+		</style>
+    <script>
+      var socket = io();
+  </script>
+	</head>
+	<body>
+		<script type="module">
+			import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+			const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+			const cube = new THREE.Mesh( geometry, material );
+			scene.add( cube );
+
+			camera.position.z = 5;
+
+			function animate() {
+				requestAnimationFrame( animate );
+
+				cube.rotation.x += 0.01;
+				cube.rotation.y += 0.01;
+
+				renderer.render( scene, camera );
+			}
+
+			animate();
+		</script>
+    <script>
+      $(document).ready(function(){
+          var url = "http://localhost:3000";
+
+              $.get(url +"/home", function(data2){
+                  if(data2.kq==1){
+                      data2.productList.forEach(function(product){
+                          console.log(product);
+                          
+                      });
+                  }    
+              })
+          });
+      });
+
+      function send() {
+          var key = radio = error = '', flag = 1;
+
+          key = $('#key').val();
+          radio = $('input[name=chat_radio]:checked').val();
+
+          var obj = {key, radio};
+
+          if (key.trim() == '') {
+              flag = 0;
+              error = 'Vui lòng nhập dữ liệu';
+          }
+
+          if (flag == 1) {
+              // gửi dữ liệu qua server
+              socket.emit('client', obj);
+          } else {
+              alert(error);
+          }
+
+          $('#key').val('')
+      }
+
+      socket.on('server', (data) => {
+          var text = data.key;
+          var id = data.id;
+
+          $('.content ul').append(`
+              <li><u>`+ id +`</u> : <b>`+ text +`</b></li>
+          `)
+      })
+
+      // nhận danh sách từ server
+      socket.on('online_list', (data)=>{
+          var str='';
+
+          data.forEach(element => {
+              str+= '<li><label for="radio_'+element+'">'+ element + '</label> ';
+              str+= '<input type="radio" name="chat_radio" value="'+element+'" id="radio_'+element+'">';
+              str+= '</li>';
+          });
+
+          $('.online_list ul').html(str)
+      });
+
+      // nhận tên từ server
+      socket.on('name', (data)=>{
+          $('#server_name').text(data)
+      })
+
+      // nhận gửi cho chính họ
+      socket.on('server-only', (data)=>{
+          var text = data.key;
+          var id = data.id;
+
+          $('.content ul').append(`
+              <li><i>`+ id +`</i> : <b>`+ text +`</b></li>
+          `)
+      })
+  </script>
+	</body>
 </html>
