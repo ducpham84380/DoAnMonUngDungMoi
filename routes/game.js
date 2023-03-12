@@ -14,7 +14,7 @@ light.position.set(0, 20, 20);
 scene.add(light);
 
 // Add a ground plane to the scene
-var groundTexture = new THREE.TextureLoader().load('ground.jpg');
+var groundTexture = new THREE.TextureLoader().load("../public/img/bg.jpg");
 groundTexture.wrapS = THREE.RepeatWrapping;
 groundTexture.wrapT = THREE.RepeatWrapping;
 groundTexture.repeat.set(10, 10);
@@ -27,7 +27,7 @@ scene.add(ground);
 // Load the dinosaur model
 var loader = new THREE.ObjectLoader();
 loader.load(
-  'dinosaur.json',
+  'trex.json',
   function (dinosaur) {
     dinosaur.scale.set(0.1, 0.1, 0.1);
     dinosaur.position.set(0, 1, 0);
