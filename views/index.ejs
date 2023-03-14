@@ -52,31 +52,30 @@
                       });
                   }    
               })
-          });
-      });
+          
 
-      function send() {
-          var key = radio = error = '', flag = 1;
+            function send() {
+            var key = radio = error = '', flag = 1;
 
-          key = $('#key').val();
-          radio = $('input[name=chat_radio]:checked').val();
+            key = $('#key').val();
+            radio = $('input[name=chat_radio]:checked').val();
 
-          var obj = {key, radio};
+            var obj = {key, radio};
 
-          if (key.trim() == '') {
-              flag = 0;
-              error = 'Vui lòng nhập dữ liệu';
-          }
+            if (key.trim() == '') {
+                flag = 0;
+                error = 'Vui lòng nhập dữ liệu';
+            }
 
-          if (flag == 1) {
-              // gửi dữ liệu qua server
-              socket.emit('client', obj);
-          } else {
-              alert(error);
-          }
+            if (flag == 1) {
+                // gửi dữ liệu qua server
+                socket.emit('client', obj);
+            } else {
+                alert(error);
+            }
 
-          $('#key').val('')
-      }
+            $('#key').val('')
+        }
 
       socket.on('server', (data) => {
           var text = data.key;
@@ -114,6 +113,7 @@
               <li><i>`+ id +`</i> : <b>`+ text +`</b></li>
           `)
       })
+    });
   </script>
 	</body>
 </html>
