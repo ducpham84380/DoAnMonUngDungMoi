@@ -298,7 +298,7 @@ window.addEventListener("load", function () {
       constructor(gameWidth, gameHeight) {
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
-        this.width = 160;
+        this.width = 158;
         this.height = 119;
         this.image = document.getElementById("enemyImg");
         this.x = this.gameWidth;
@@ -416,8 +416,8 @@ window.addEventListener("load", function () {
       background.update();
       player.draw(ctx);
       player.update(input, deltaTime, enemies);
-      player2.draw(ctx);
-      player2.update(input2, deltaTime, enemies);
+    //   player2.draw(ctx);
+    //   player2.update(input2, deltaTime, enemies);
   
       handleEnemies(deltaTime);
       displayStatusText(ctx);
