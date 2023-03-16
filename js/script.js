@@ -6,10 +6,13 @@ window.addEventListener("load", function () {
   let enemies = [];
   let score = 0;
   let gameOver = false;
+  const fullScreenButton = this.document.getElementById("fullScreenButton");
 
   class InputHandler {
     constructor() {
       this.keys = [];
+      this.touchY = "";
+      this.touchTreshold = 50;
       window.addEventListener("keydown", (e) => {
         if (
           (e.key === "ArrowDown" ||
@@ -19,6 +22,8 @@ window.addEventListener("load", function () {
           this.keys.indexOf(e.key) === -1
         ) {
           this.keys.push(e.key);
+        } else if (e.key === " " && gameOver) {
+          restartGame();
         }
         console.log(e.key, this.keys);
       });
@@ -34,6 +39,30 @@ window.addEventListener("load", function () {
         }
         console.log(e.key, this.keys);
       });
+      window.addEventListener("touchstart", (e) => {
+        this.touchY = e.changedTouches[0].pageY;
+      });
+      window.addEventListener("touchmove", (e) => {
+        const swipeDistance = e.changedTouches[0].pageY - this.touchY;
+        if (
+          swipeDistance < -this.touchTreshold &&
+          this.keys.indexOf("swipe up") === -1
+        ) {
+          this.keys.push("swipe up");
+        } else if (
+          swipeDistance > this.touchTreshold &&
+          this.keys.indexOf("swipe down") === -1
+        ) {
+          this.keys.push("swipe down");
+          if (gameOver) {
+            restartGame();
+          }
+        }
+      });
+      window.addEventListener("touchend", (e) => {
+        this.keys.splice(this.keys.indexOf("swipe up"), 1);
+        this.keys.splice(this.keys.indexOf("swipe down"), 1);
+      });
     }
   }
 
@@ -43,7 +72,7 @@ window.addEventListener("load", function () {
       this.gameHeight = gameHeight;
       this.width = 200;
       this.height = 200;
-      this.x = 0;
+      this.x = 100;
       this.y = this.gameHeight - this.height;
       this.image = document.getElementById("playerImage");
       this.frameX = 0;
@@ -56,14 +85,20 @@ window.addEventListener("load", function () {
       this.vy = 0;
       this.weight = 1;
     }
+    restart() {
+      this.x = 100;
+      this.y = this.gameHeight - this.height;
+      this.maxFrame = 8;
+      this.frameY = 0;
+    }
     draw(context) {
       // context.strokeStyle = "white";
       // context.strokeRect(this.x, this.y, this.width, this.height);
       // context.beginPath();
       // context.arc(
       //   this.x + this.width / 2,
-      //   this.y + this.height / 2,
-      //   this.width / 2,
+      //   this.y + this.height / 2 + 20,
+      //   this.width / 3,
       //   0,
       //   2 * Math.PI
       // );
@@ -87,10 +122,10 @@ window.addEventListener("load", function () {
     update(input, deltaTime, enemies) {
       //Collision detection
       enemies.forEach((enemy) => {
-        const dx = enemy.x + enemy.width / 2 - (this.x + this.width / 2);
-        const dy = enemy.y + enemy.height / 2 - (this.y + this.height / 2);
+        const dx = enemy.x + enemy.width / 2 - 20 - (this.x + this.width / 2);
+        const dy = enemy.y + enemy.height / 2 - (this.y + this.height / 2 + 20);
         const distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance < enemy.width / 2 + this.width / 2) {
+        if (distance < enemy.width / 3 + this.width / 3) {
           gameOver = true;
         }
       });
@@ -112,7 +147,11 @@ window.addEventListener("load", function () {
         this.speed = 6;
       } else if (input.keys.indexOf("ArrowLeft") > -1) {
         this.speed = -4;
-      } else if (input.keys.indexOf("ArrowUp") > -1 && this.onGround()) {
+      } else if (
+        (input.keys.indexOf("ArrowUp") > -1 ||
+          input.keys.indexOf("swipe up") > -1) &&
+        this.onGround()
+      ) {
         this.vy -= 28;
       } else if (input.keys.indexOf("ArrowDown") > -1 && !this.onGround()) {
         this.weight = 3;
@@ -121,7 +160,6 @@ window.addEventListener("load", function () {
         this.weight = 1;
       }
       //Horizon movement
-      this.x += this.speed;
       if (this.x < 0) {
         this.x = 0;
       } else if (this.x > this.gameWidth - this.width) {
@@ -141,129 +179,130 @@ window.addEventListener("load", function () {
       if (this.y > this.gameHeight - this.height) {
         this.y = this.gameHeight - this.height;
       }
-    }
-    onGround() {
-      return this.y >= this.gameHeight - this.height;
-    }
-  }
-
-  class InputHandler2 {
-    constructor() {
-      this.keys = [];
-      window.addEventListener("keydown", (e) => {
-        console.log(e);
-        if (
-          (e.key === "s" || e.key === "w" || e.key === "a" || e.key === "d") &&
-          this.keys.indexOf(e.key) === -1
-        ) {
-          this.keys.push(e.key);
-        }
-        console.log(e.key, this.keys);
-      });
-
-      window.addEventListener("keyup", (e) => {
-        if (e.key === "s" || e.key === "w" || e.key === "a" || e.key === "d") {
-          this.keys.splice(this.keys.indexOf(e.key), 1);
-        }
-        console.log(e.key, this.keys);
-      });
-    }
-  }
-
-  class Player2 {
-    constructor(gameWidth, gameHeight) {
-      this.gameWidth = gameWidth;
-      this.gameHeight = gameHeight;
-      this.width = 200;
-      this.height = 200;
-      this.x = 0;
-      this.y = this.gameHeight - this.height;
-      this.image = document.getElementById("playerImage");
-      this.frameX = 0;
-      this.maxFrame = 8;
-      this.frameY = 0;
-      this.fps = 30;
-      this.frameTimer = 0;
-      this.frameInterval = 1000 / this.fps;
-      this.speed = 0;
-      this.vy = 0;
-      this.weight = 1;
-    }
-    draw(context) {
-      context.drawImage(
-        this.image,
-        this.frameX * this.width,
-        this.frameY * this.height,
-        this.width,
-        this.height,
-        this.x,
-        this.y,
-        this.width,
-        this.height
-      );
-    }
-    update(input2, deltaTime, enemies) {
-      //Collision detection
-      enemies.forEach((enemy) => {
-        const dx = enemy.x + enemy.width / 2 - (this.x + this.width / 2);
-        const dy = enemy.y + enemy.height / 2 - (this.y + this.height / 2);
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance < enemy.width / 2 + this.width / 2) {
-          gameOver = true;
-        }
-      });
-
-      //Sprite animation
-      if (this.frameTimer > this.frameInterval) {
-        if (this.frameX >= this.maxFrame) {
-          this.frameX = 0;
-        } else {
-          this.frameX++;
-        }
-        this.frameTimer = 0;
-      } else {
-        this.frameTimer += deltaTime;
-      }
-
-      //Movement
-      if (input2.keys.indexOf("d") > -1) {
-        this.speed = 6;
-      } else if (input2.keys.indexOf("a") > -1) {
-        this.speed = -4;
-      } else if (input2.keys.indexOf("w") > -1 && this.onGround()) {
-        this.vy -= 28;
-      } else if (input2.keys.indexOf("s") > -1 && !this.onGround()) {
-        this.weight = 3;
-      } else {
-        this.speed = 0;
-        this.weight = 1;
-      }
-      //Horizon movement
       this.x += this.speed;
-      if (this.x < 0) {
-        this.x = 0;
-      } else if (this.x > this.gameWidth - this.width) {
-        this.x = this.gameWidth - this.width;
-      }
-      //vertical movement
-      this.y += this.vy;
-      if (!this.onGround()) {
-        this.vy += this.weight;
-        this.maxFrame = 5;
-        this.frameY = 1;
-      } else {
-        this.vy = 0;
-        this.maxFrame = 8;
-        this.frameY = 0;
-      }
-      if (this.y > this.gameHeight - this.height) {
-        this.y = this.gameHeight - this.height;
-      }
     }
     onGround() {
       return this.y >= this.gameHeight - this.height;
     }
   }
+
+  // class InputHandler2 {
+  //   constructor() {
+  //     this.keys = [];
+  //     window.addEventListener("keydown", (e) => {
+  //       console.log(e);
+  //       if (
+  //         (e.key === "s" || e.key === "w" || e.key === "a" || e.key === "d") &&
+  //         this.keys.indexOf(e.key) === -1
+  //       ) {
+  //         this.keys.push(e.key);
+  //       }
+  //       console.log(e.key, this.keys);
+  //     });
+
+  //     window.addEventListener("keyup", (e) => {
+  //       if (e.key === "s" || e.key === "w" || e.key === "a" || e.key === "d") {
+  //         this.keys.splice(this.keys.indexOf(e.key), 1);
+  //       }
+  //       console.log(e.key, this.keys);
+  //     });
+  //   }
+  // }
+
+  // class Player2 {
+  //   constructor(gameWidth, gameHeight) {
+  //     this.gameWidth = gameWidth;
+  //     this.gameHeight = gameHeight;
+  //     this.width = 200;
+  //     this.height = 200;
+  //     this.x = 0;
+  //     this.y = this.gameHeight - this.height;
+  //     this.image = document.getElementById("playerImage");
+  //     this.frameX = 0;
+  //     this.maxFrame = 8;
+  //     this.frameY = 0;
+  //     this.fps = 30;
+  //     this.frameTimer = 0;
+  //     this.frameInterval = 1000 / this.fps;
+  //     this.speed = 0;
+  //     this.vy = 0;
+  //     this.weight = 1;
+  //   }
+  //   draw(context) {
+  //     context.drawImage(
+  //       this.image,
+  //       this.frameX * this.width,
+  //       this.frameY * this.height,
+  //       this.width,
+  //       this.height,
+  //       this.x,
+  //       this.y,
+  //       this.width,
+  //       this.height
+  //     );
+  //   }
+  //   update(input2, deltaTime, enemies) {
+  //     //Collision detection
+  //     enemies.forEach((enemy) => {
+  //       const dx = enemy.x + enemy.width / 2 - (this.x + this.width / 2);
+  //       const dy = enemy.y + enemy.height / 2 - (this.y + this.height / 2);
+  //       const distance = Math.sqrt(dx * dx + dy * dy);
+  //       if (distance < enemy.width / 2 + this.width / 2) {
+  //         gameOver = true;
+  //       }
+  //     });
+
+  //     //Sprite animation
+  //     if (this.frameTimer > this.frameInterval) {
+  //       if (this.frameX >= this.maxFrame) {
+  //         this.frameX = 0;
+  //       } else {
+  //         this.frameX++;
+  //       }
+  //       this.frameTimer = 0;
+  //     } else {
+  //       this.frameTimer += deltaTime;
+  //     }
+
+  //     //Movement
+  //     if (input2.keys.indexOf("d") > -1) {
+  //       this.speed = 6;
+  //     } else if (input2.keys.indexOf("a") > -1) {
+  //       this.speed = -4;
+  //     } else if (input2.keys.indexOf("w") > -1 && this.onGround()) {
+  //       this.vy -= 28;
+  //     } else if (input2.keys.indexOf("s") > -1 && !this.onGround()) {
+  //       this.weight = 3;
+  //     } else {
+  //       this.speed = 0;
+  //       this.weight = 1;
+  //     }
+  //     //Horizon movement
+  //     this.x += this.speed;
+  //     if (this.x < 0) {
+  //       this.x = 0;
+  //     } else if (this.x > this.gameWidth - this.width) {
+  //       this.x = this.gameWidth - this.width;
+  //     }
+  //     //vertical movement
+  //     this.y += this.vy;
+  //     if (!this.onGround()) {
+  //       this.vy += this.weight;
+  //       this.maxFrame = 5;
+  //       this.frameY = 1;
+  //     } else {
+  //       this.vy = 0;
+  //       this.maxFrame = 8;
+  //       this.frameY = 0;
+  //     }
+  //     if (this.y > this.gameHeight - this.height) {
+  //       this.y = this.gameHeight - this.height;
+  //     }
+  //   }
+  //   onGround() {
+  //     return this.y >= this.gameHeight - this.height;
+  //   }
+  // }
 
   class Background {
     constructor(gameWidth, gameHeight) {
@@ -292,6 +331,9 @@ window.addEventListener("load", function () {
         this.x = 0;
       }
     }
+    restart() {
+      this.x = 0;
+    }
   }
 
   class Enemy {
@@ -308,7 +350,7 @@ window.addEventListener("load", function () {
       this.fps = 20;
       this.frameTimer = 0;
       this.frameInterval = 1000 / this.fps;
-      this.speed = 5;
+      this.speed = 8;
       this.markForDeletion = false;
     }
     draw(context) {
@@ -316,9 +358,9 @@ window.addEventListener("load", function () {
       // context.strokeRect(this.x, this.y, this.width, this.height);
       // context.beginPath();
       // context.arc(
-      //   this.x + this.width / 2,
+      //   this.x + this.width / 2 - 20,
       //   this.y + this.height / 2,
-      //   this.width / 2,
+      //   this.width / 3,
       //   0,
       //   2 * Math.PI
       // );
@@ -362,7 +404,7 @@ window.addEventListener("load", function () {
   function handleEnemies(deltaTime) {
     if (enemyTimer > enemyInterval + randomEmemyInterval) {
       enemies.push(new Enemy(canvas.width, canvas.height));
-      console.log(enemies);
+      //console.log(enemies);
       randomEmemyInterval = Math.random() * 1000 + 500;
       enemyTimer = 0;
     } else {
@@ -376,8 +418,8 @@ window.addEventListener("load", function () {
   }
 
   function displayStatusText(context) {
+    context.textAlign = "left";
     context.font = "40px Helvetica";
-
     context.fillStyle = "black";
     context.fillText("Score: " + score, 20, 50);
     context.fillStyle = "white";
@@ -390,16 +432,45 @@ window.addEventListener("load", function () {
       context.fillStyle = "white";
       context.fillText("GAME OVER: " + score, canvas.width / 2 + 2, 200);
       context.fillStyle = "black";
-      context.fillText("Press 'SPACE' to try again", canvas.width / 2, 333);
+      context.fillText(
+        "Press 'SPACE' or 'Swipe Down' to try again",
+        canvas.width / 2,
+        333
+      );
       context.fillStyle = "white";
-      context.fillText("Press 'SPACE' to try again", canvas.width / 2 + 2, 333);
+      context.fillText(
+        "Press 'SPACE' or 'Swipe Down' to try again",
+        canvas.width / 2 + 2,
+        333
+      );
     }
   }
 
+  function restartGame() {
+    player.restart();
+    background.restart();
+    enemies = [];
+    score = 0;
+    gameOver = false;
+    animate(0);
+  }
+
+  function togglefullScreen() {
+    console.log(document.fullscreenElement);
+    if (!document.fullscreenElement) {
+      canvas.requestFullscreen().catch((err) => {
+        alert(`Error, can't enable full-screen mode: ${err.message}`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  }
+  fullScreenButton.addEventListener("click", togglefullScreen);
+
   const input = new InputHandler();
-  const input2 = new InputHandler2();
+  //const input2 = new InputHandler2();
   const player = new Player(canvas.width, canvas.height);
-  const player2 = new Player2(canvas.width, canvas.height);
+  //const player2 = new Player2(canvas.width, canvas.height);
   const background = new Background(canvas.width, canvas.height);
 
   let lastTime = 0;
@@ -416,8 +487,8 @@ window.addEventListener("load", function () {
     background.update();
     player.draw(ctx);
     player.update(input, deltaTime, enemies);
-    player2.draw(ctx);
-    player2.update(input2, deltaTime, enemies);
+    //player2.draw(ctx);
+    //player2.update(input2, deltaTime, enemies);
 
     handleEnemies(deltaTime);
     displayStatusText(ctx);
@@ -428,10 +499,10 @@ window.addEventListener("load", function () {
   }
   animate(0);
 
-  this.addEventListener("keydown", (e) => {
-    if (gameOver && e.code === "Space") {
-      console.log("reload");
-      this.location.reload();
-    }
-  });
+  // this.addEventListener("keydown", (e) => {
+  //   if (gameOver && e.code === "Space") {
+  //     console.log("reload");
+  //     this.location.reload();
+  //   }
+  // });
 });
