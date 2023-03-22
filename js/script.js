@@ -6,6 +6,7 @@ window.addEventListener("load", function () {
   let enemies = [];
   let score = 0;
   let gameOver = false;
+  let lives = 3;
   const fullScreenButton = this.document.getElementById("fullScreenButton");
 
   class InputHandler {
@@ -84,6 +85,7 @@ window.addEventListener("load", function () {
       this.speed = 0;
       this.vy = 0;
       this.weight = 1;
+      this.canCollide = true;
     }
     restart() {
       this.x = 100;
@@ -121,14 +123,26 @@ window.addEventListener("load", function () {
     }
     update(input, deltaTime, enemies) {
       //Collision detection
-      enemies.forEach((enemy) => {
-        const dx = enemy.x + enemy.width / 2 - 20 - (this.x + this.width / 2);
-        const dy = enemy.y + enemy.height / 2 - (this.y + this.height / 2 + 20);
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance < enemy.width / 3 + this.width / 3) {
-          gameOver = true;
-        }
-      });
+      if (this.canCollide) {
+        enemies.forEach((enemy) => {
+          const dx = enemy.x + enemy.width / 2 - 20 - (this.x + this.width / 2);
+          const dy =
+            enemy.y + enemy.height / 2 - (this.y + this.height / 2 + 20);
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < enemy.width / 3 + this.width / 3) {
+            if (lives >= 1) {
+              lives--;
+              this.canCollide = false;
+              //this.maxFrames = 2;
+              setTimeout(() => {
+                this.canCollide = true;
+              }, 1000);
+            } else {
+              gameOver = true;
+            }
+          }
+        });
+      }
 
       //Sprite animation
       if (this.frameTimer > this.frameInterval) {
@@ -424,6 +438,10 @@ window.addEventListener("load", function () {
     context.fillText("Score: " + score, 20, 50);
     context.fillStyle = "white";
     context.fillText("Score: " + score, 22, 52);
+    this.livesImage = document.getElementById("lives");
+    for (let i = 0; i < lives; i++) {
+      context.drawImage(this.livesImage, 20 * i + 15, 67, 50, 50);
+    }
 
     if (gameOver) {
       context.textAlign = "center";
@@ -452,6 +470,7 @@ window.addEventListener("load", function () {
     enemies = [];
     score = 0;
     gameOver = false;
+    lives = 5;
     animate(0);
   }
 
