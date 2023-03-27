@@ -1,6 +1,26 @@
 body{
     background: black;
 }
+
+h3 {
+    background: #00fb00;
+    margin-top: 0;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.online_list,
+.content {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    height: 300px;
+}
+.content{
+    margin-bottom: 10px;
+}
+
 #canvas1{
     position: absolute;
     top:50%;

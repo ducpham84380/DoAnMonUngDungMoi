@@ -12,12 +12,15 @@ app.io = io;
 server.listen(3000);
 
 var array=[];
-io.on("connection",function(socket){
-    console.log("new connection"+ socket.id);
+io.on('connection', (socket)=>{
+    console.log('Đã online : ' + socket.id)
+
     // thêm người online vào mảng
-    array.push(socket.id);
+    array.push(socket.id)
+
     // Gửi tên của chính người đó ra ngoài
     socket.emit('name', socket.id);
+
     // 1. Gửi cho chính họ
     //socket.emit('name', data);
 
@@ -43,9 +46,10 @@ io.on("connection",function(socket){
 
     // ngắt kết
     socket.on('disconnect', ()=>{
-        console.log('Đã thoát : ' + socket.id);
+        console.log('Đã thoát : ' + socket.id)
+
         // Xóa người logout
-        array.splice(array.indexOf(socket.id), 1);
+        array.splice(array.indexOf(socket.id), 1)
     })
 
     // Gửi danh sách ra cho tất cả
