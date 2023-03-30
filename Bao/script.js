@@ -118,8 +118,12 @@ window.addEventListener('load', function(){
             this.x--;
         }
     }
+
     enemies.push(new Enemy(canvas.width,canvas.height));
     function handleEnemies(){
+        if(enmyTimer > enemyInterval){
+            enemies.push(new Enemy(canvas.width,canvas.height));
+        }
       enemies.forEach(enemy =>{
         enemy.update();
         enemy.draw(ctx);
@@ -127,11 +131,16 @@ window.addEventListener('load', function(){
     }
     function displayStatusText(){
 
+
     }
     const input = new InputHandler();
     const player = new Player(canvas.width,canvas.height);
     const background = new Background(canvas.width,canvas.height);
+    
     let lastTime=0;
+    let enmyTimer =0;
+    let enemyInterval = 1000;
+
     function  animate(timeStamp){
         const deltaTime = timeStamp -lastTime;
         lastTime = timeStamp;
