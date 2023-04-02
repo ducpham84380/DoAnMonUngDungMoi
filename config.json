@@ -8,8 +8,8 @@
     },
     "mongoose":{
         "server":"cluster0.a8gqm.mongodb.net",
-        "username":"GameUngDung",
-        "password":"6waLDDs8WZ6Ye49F",
-        "dbname":"GameUngDung_01"
+        "username":"ItachiUchiha",
+        "password":"W1ua3SnPCZ7ZuUt2",
+        "dbname":"ItachiUchiha_01"
     }
 }

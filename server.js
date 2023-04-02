@@ -56,18 +56,21 @@ io.on('connection', (socket)=>{
     io.sockets.emit('online_list', array);
 });
 
+
+
+
 var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended:false}));
 
 fs.readFile("./config.json", "utf8", function(err, data){
     if(err){ throw err };
     var obj = JSON.parse(data);
-    //mongodb+srv://GameUngDung:6waLDDs8WZ6Ye49F@cluster0.a8gqm.mongodb.net/?retryWrites=true&w=majority
+    //mongodb+srv://ItachiUchiha:<password>@cluster0.a8gqm.mongodb.net/?retryWrites=true&w=majority
     // kết nối CSDL mongooseDB
     const mongoose = require('mongoose');
     mongoose.set('strictQuery', false);
     mongoose.set('strictQuery', true);
-    mongoose.connect('mongodb+srv://'+obj.mongoose.username+':'+obj.mongoose.password+'@'+obj.mongoose.server+'/'+obj.mongoose.dbname+'?retryWrites=true&w=majority',function(err){
+        mongoose.connect('mongodb+srv://'+obj.mongoose.username+':'+obj.mongoose.password+'@'+obj.mongoose.server+'/'+obj.mongoose.dbname+'?retryWrites=true&w=majority',function(err){
         if(err)
         {
             console.log("DataBase khong ket noi: "+ err);
@@ -79,6 +82,8 @@ fs.readFile("./config.json", "utf8", function(err, data){
     // 
    
     require("./routes/game")(app);
+    require("./routes/client")(app);
+    require("./routes/main")(app);
 });
 
 

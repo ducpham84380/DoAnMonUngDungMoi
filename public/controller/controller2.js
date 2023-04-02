@@ -7,7 +7,7 @@ window.addEventListener("load", function () {
   canvas.width = 1400;
   canvas.height = 700;
 
-  let clientBalls = [];
+  let otherPlayers = {};
   let enemies = [];
   let score = 0;
   let gameOver = false;
@@ -424,6 +424,10 @@ window.addEventListener("load", function () {
     player.update(input, deltaTime, enemies);
     // player2.draw(ctx);
     // player2.update(input2, deltaTime, enemies);
+    socket.on('update', (data) => {
+      player.draw(ctx);
+      player.update(input, deltaTime, enemies);
+    });
 
     handleEnemies(deltaTime);
     displayStatusText(ctx);
@@ -441,20 +445,23 @@ window.addEventListener("load", function () {
     }
   });
 
-  // socket.on('updatePlayers', (data) => {
-  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  //   playersFound = {};
-  //   for(let id in array){
-  //       if(clientBalls[id] === undefined && id !== socket.id){
-  //           clientBalls[id] = new Player (canvas.width,canvas.height);
-  //       }
-  //       playersFound[id] = true;
-  //   }
-  //   for(let id in clientBalls){
-  //       if(!playersFound[id]){
-  //           clientBalls[id].remove();
-  //           delete clientBalls[id];
-  //       }
-  //   }
-  // });
+  let players = {};
+    io.on('connection', (socket) => {
+        console.log('a user connected');
+
+        players[socket.id] = {
+            player
+        };
+
+        socket.on('update', (data) => {
+            players[socket.id] = data;
+            socket.broadcast.emit('update', players[socket.id]);
+        });
+
+        socket.on('disconnect', () => {
+            console.log('a user disconnected');
+            delete players[socket.id];
+        });
+    });
+
 });

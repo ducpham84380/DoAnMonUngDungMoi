@@ -1,8 +1,34 @@
-//import * as THREE from 'three';
+const Player = require("../public/models/Player");
+const Token = require("../public/models/Token");
 
+var jwt = require("jsonwebtoken");
+var privateKey = "0";
 module.exports = function(app){
-    app.get("/", function(req, res){
-        res.render("index", {content:"./index.ejs"});
+    app.get("/game", function(req, res){
+        res.render("game", {content:"./game.ejs"});
+    });
+
+    app.post("/game/newPlayer", function(req, res){
+        console.log("Post register");
+        console.log( req.body );
+        // Check avaible Username/Email
+        User.find({
+            "$or": [{"NamePlayer":req.body.NamePlayer}]
+        }, function(err, data){
+            var newPlayer = Player({
+                NamePlayer: req.body.NamePlayer,
+                ID:req.body.Id,
+                Point:privateKey,
+            });
+    
+            newPlayer.save(function(err){
+                if(err){
+                    res.json({kq:0, errMsg:"Mongo save user error"});
+                }else{
+                    res.json({kq:1, errMsg:"Player register successfully."});
+                }
+            });
+        });
     });
 }
 
