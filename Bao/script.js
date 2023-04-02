@@ -110,18 +110,26 @@ window.addEventListener('load', function(){
             this.image = document.getElementById('enemyImage');
             this.x=this.gameWidth;
             this.y=this.gameHeight;
+            this.frameX =0;
+            this.frameY =0;
+            this.maxframeX=5;
+            this.fps =20;
+            this.speed=8;
         }
         draw(context) {
             context.drawImage(this.image,  this.frameX=this.width,0, this.frameY=this.height,this.x,this.y,this.width,this.height);
            }
-        update(){
-            this.x--;
+        update(deltaTime){
+            if(this.frameX >= this.maxframe)this.frameX = this.maxframeX =0;
+            else this.frameX++;
+            this.x -=this.speed ;
         }
     }
 
     enemies.push(new Enemy(canvas.width,canvas.height));
-    function handleEnemies(){
+    function handleEnemies(deltaTime) {
         if(enmyTimer > enemyInterval){
+            randomEnmyInterval = Math.random() *1000 + 500;
             enemies.push(new Enemy(canvas.width,canvas.height));
         }
       enemies.forEach(enemy =>{
@@ -140,6 +148,7 @@ window.addEventListener('load', function(){
     let lastTime=0;
     let enmyTimer =0;
     let enemyInterval = 1000;
+    let randomEnmyInterval = Math.random() * 1000 +500;
 
     function  animate(timeStamp){
         const deltaTime = timeStamp -lastTime;
@@ -149,7 +158,7 @@ window.addEventListener('load', function(){
         background.update();
         player.draw(ctx);
         player.update(input);
-        handleEnemies();
+        handleEnemies(deltaTime);
         requestAnimationFrame(animate);
     }
     animate();
