@@ -12,22 +12,26 @@ module.exports = function(app){
         console.log("Post register");
         console.log( req.body );
         // Check avaible Username/Email
-        User.find({
+        Player.find({
             "$or": [{"NamePlayer":req.body.NamePlayer}]
         }, function(err, data){
-            var newPlayer = Player({
-                NamePlayer: req.body.NamePlayer,
-                ID:req.body.Id,
-                Point:privateKey,
-            });
-    
-            newPlayer.save(function(err){
-                if(err){
-                    res.json({kq:0, errMsg:"Mongo save user error"});
-                }else{
-                    res.json({kq:1, errMsg:"Player register successfully."});
-                }
-            });
+            if(data.length==0){
+                var newPlayer = Player({
+                    NamePlayer: req.body.NamePlayer,
+                    ID:req.body.Id,
+                    Point:privateKey,
+                });
+        
+                newPlayer.save(function(err){
+                    if(err){
+                        res.json({kq:0, errMsg:"Mongo save user error"});
+                    }else{
+                        res.json({kq:1, errMsg:"Player register successfully."});
+                    }
+                });
+            }else{
+                res.json({kq:0,errMsg:"Username is not availble."});
+            }
         });
     });
 }

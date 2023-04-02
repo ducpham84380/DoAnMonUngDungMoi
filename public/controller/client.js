@@ -1,10 +1,10 @@
-const socket = io.connect('http://localhost:3000');
-
-        socket.on('name', (data)=>{
-            $('#Id').val(data)
-        });
 
 $(document).ready(function(){
+    var socket = io();
+
+    socket.on('name', (data)=>{
+        $('#Id').val(data)
+    });
     var url = "http://localhost:3000";
 
     $("#btnStar").click(function(){
@@ -17,8 +17,7 @@ $(document).ready(function(){
             }, function(data){
                 if(data.kq == 1){
                     alert(data.errMsg);
-
-                    this.href += 'index';
+                    document.location.href='/index';
                 }else{
                     alert(data.errMsg);
                 }
