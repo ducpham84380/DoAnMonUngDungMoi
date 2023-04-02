@@ -131,6 +131,7 @@ window.addEventListener("load", function () {
           const distance = Math.sqrt(dx * dx + dy * dy);
           if (distance < enemy.width / 3 + this.width / 3) {
             if (lives >= 1) {
+              //lives logical
               lives--;
               this.canCollide = false;
               //this.maxFrames = 2;
@@ -470,7 +471,7 @@ window.addEventListener("load", function () {
     enemies = [];
     score = 0;
     gameOver = false;
-    lives = 5;
+    lives = 3;
     animate(0);
   }
 
