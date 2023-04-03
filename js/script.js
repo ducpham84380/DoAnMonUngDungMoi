@@ -3,6 +3,7 @@ window.addEventListener("load", function () {
   //var audio = document.getElementById("music");
   var audio = new Audio("../audio/passwordinfinity.mp3");
   audio.loop = true;
+  var hurtaudio = new Audio("../audio/cryofhurt.wav");
   const ctx = canvas.getContext("2d");
   canvas.width = 1400;
   canvas.height = 700;
@@ -138,6 +139,7 @@ window.addEventListener("load", function () {
               lives--;
               this.canCollide = false;
               this.image = document.getElementById("playerImage2");
+              hurtaudio.play();
               setTimeout(() => {
                 this.canCollide = true;
                 this.image = document.getElementById("playerImage");
