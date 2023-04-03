@@ -130,14 +130,15 @@ window.addEventListener("load", function () {
             enemy.y + enemy.height / 2 - (this.y + this.height / 2 + 20);
           const distance = Math.sqrt(dx * dx + dy * dy);
           if (distance < enemy.width / 3 + this.width / 3) {
-            if (lives >= 1) {
+            if (lives >= 2) {
               //lives logical
               lives--;
               this.canCollide = false;
-              //this.maxFrames = 2;
+              this.image = document.getElementById("playerImage2");
               setTimeout(() => {
                 this.canCollide = true;
-              }, 1000);
+                this.image = document.getElementById("playerImage");
+              }, 1500);
             } else {
               gameOver = true;
             }

@@ -18,6 +18,7 @@ body {
 }
 
 #playerImage,
+#playerImage2,
 #backgroundImage,
 #enemyImage {
   display: none;
