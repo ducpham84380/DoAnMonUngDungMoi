@@ -515,6 +515,8 @@ window.addEventListener("load", function () {
 
     if (!gameOver) {
       requestAnimationFrame(animate);
+    }else{
+      document.location.href='/client';
     }
   }
   animate(0);

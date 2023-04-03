@@ -83,7 +83,7 @@ fs.readFile("./config.json", "utf8", function(err, data){
    
     require("./routes/game")(app);
     require("./routes/client")(app);
-    require("./routes/main")(app);
+    require("./routes/index")(app);
 });
 
 
