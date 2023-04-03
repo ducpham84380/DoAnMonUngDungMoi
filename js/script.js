@@ -1,5 +1,8 @@
 window.addEventListener("load", function () {
   const canvas = document.getElementById("canvas1");
+  //var audio = document.getElementById("music");
+  var audio = new Audio("../audio/passwordinfinity.mp3");
+  audio.loop = true;
   const ctx = canvas.getContext("2d");
   canvas.width = 1400;
   canvas.height = 700;
@@ -140,6 +143,7 @@ window.addEventListener("load", function () {
                 this.image = document.getElementById("playerImage");
               }, 1500);
             } else {
+              audio.pause();
               gameOver = true;
             }
           }
@@ -474,6 +478,8 @@ window.addEventListener("load", function () {
     gameOver = false;
     lives = 3;
     animate(0);
+    audio.currentTime = 0;
+    audio.play();
   }
 
   function togglefullScreen() {
@@ -515,6 +521,8 @@ window.addEventListener("load", function () {
     displayStatusText(ctx);
 
     if (!gameOver) {
+      audio.play();
+
       requestAnimationFrame(animate);
     }
   }
