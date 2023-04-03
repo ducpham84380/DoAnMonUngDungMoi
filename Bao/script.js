@@ -46,7 +46,7 @@ window.addEventListener('load', function(){
             this.speed=0;
             this.vy=0;
             this.weight =0;
-
+            thí.fps =20;
         }
         draw(context){
             context.fillStyle ='white';
@@ -54,7 +54,7 @@ window.addEventListener('load', function(){
             context.drawImage(this.image,this.frameX * this.width,this.frameY * this.height,this.width,this.heigh,this.x,this.y,this.width,this.height);
             
         }
-        update(){
+        update(input,deltaTime) {
             this.x+=this.speed;
             if(input.keys.indexOf('ArrowRight') >-1 ){
                 this.speed =5;
@@ -70,9 +70,13 @@ window.addEventListener('load', function(){
             else if(this.x >this.gameWidth -this.width) this.x=this.gameWidth -this.width;
             this.y +=this.vy;
             if(!this.onGround()){
-                this.vy+=this.weights;
+                this.vy += this.weight;
+                this.maxFrame = 5;
+                this.frameY = 1;
             }else {
                 this.vy =0;
+                this.frameY = 0;
+                this.maxFrame = 8;
             }
             if(this.y >this.gameHeight - this.height) this.y =this.gameHeight - this.height -this.height
         }
@@ -115,6 +119,7 @@ window.addEventListener('load', function(){
             this.maxframeX=5;
             this.fps =20;
             this.speed=8;
+            this.markedForDeletion=false;
         }
         draw(context) {
             context.drawImage(this.image,  this.frameX=this.width,0, this.frameY=this.height,this.x,this.y,this.width,this.height);
@@ -123,23 +128,31 @@ window.addEventListener('load', function(){
             if(this.frameX >= this.maxframe)this.frameX = this.maxframeX =0;
             else this.frameX++;
             this.x -=this.speed ;
+            if(this.x <0 - this.width) this.markedForDeletion = true;
         }
     }
 
     enemies.push(new Enemy(canvas.width,canvas.height));
+    
     function handleEnemies(deltaTime) {
         if(enmyTimer > enemyInterval){
             randomEnmyInterval = Math.random() *1000 + 500;
             enemies.push(new Enemy(canvas.width,canvas.height));
+            console.log(enemies);
+            enmyTimer = 0 ;
         }
       enemies.forEach(enemy =>{
         enemy.update();
         enemy.draw(ctx);
       })
+      enemies = enemies.filter(enemy => !enemy.markedForDeletion);
     }
     function displayStatusText(){
-
-
+        context.fillStyle = 'black';
+        context.font = '40px Helvetica';
+        context.fillText = ('Scire:' +ScreenOrientation,20,50);
+        context.fillStyle = 'white';
+        context.fillText = ('Scire:' +ScreenOrientation,20,52);
     }
     const input = new InputHandler();
     const player = new Player(canvas.width,canvas.height);
@@ -157,7 +170,7 @@ window.addEventListener('load', function(){
         background.draw(ctx);
         background.update();
         player.draw(ctx);
-        player.update(input);
+        player.update(input,deltaTime);
         handleEnemies(deltaTime);
         requestAnimationFrame(animate);
     }
