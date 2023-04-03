@@ -13,8 +13,7 @@ window.addEventListener("load", function () {
     constructor() {
       this.keys = [];
       this.touchY = "";
-      //this.touchTrehold = 50;
-
+      this.touchTreshold = 50;
       window.addEventListener("keydown", (e) => {
         if (
           (e.key === "ArrowDown" ||
@@ -76,7 +75,7 @@ window.addEventListener("load", function () {
       this.height = 200;
       this.x = 100;
       this.y = this.gameHeight - this.height;
-      this.image = document.getElementById("playerImg");
+      this.image = document.getElementById("playerImage");
       this.frameX = 0;
       this.maxFrame = 8;
       this.frameY = 0;
@@ -131,13 +130,15 @@ window.addEventListener("load", function () {
             enemy.y + enemy.height / 2 - (this.y + this.height / 2 + 20);
           const distance = Math.sqrt(dx * dx + dy * dy);
           if (distance < enemy.width / 3 + this.width / 3) {
-            if (lives >= 1) {
+            if (lives >= 2) {
+              //lives logical
               lives--;
               this.canCollide = false;
-              //this.maxFrames = 2;
+              this.image = document.getElementById("playerImage2");
               setTimeout(() => {
                 this.canCollide = true;
-              }, 1000);
+                this.image = document.getElementById("playerImage");
+              }, 1500);
             } else {
               gameOver = true;
             }
@@ -323,7 +324,7 @@ window.addEventListener("load", function () {
     constructor(gameWidth, gameHeight) {
       this.gameWidth = gameWidth;
       this.gameHeight = gameHeight;
-      this.image = document.getElementById("backgroundImg");
+      this.image = document.getElementById("backgroundImage");
       this.x = 0;
       this.y = 0;
       this.width = 2400;
@@ -357,7 +358,7 @@ window.addEventListener("load", function () {
       this.gameHeight = gameHeight;
       this.width = 160;
       this.height = 119;
-      this.image = document.getElementById("enemyImg");
+      this.image = document.getElementById("enemyImage");
       this.x = this.gameWidth;
       this.y = this.gameHeight - this.height;
       this.frameX = 0;
@@ -471,7 +472,7 @@ window.addEventListener("load", function () {
     enemies = [];
     score = 0;
     gameOver = false;
-    lives = 5;
+    lives = 3;
     animate(0);
   }
 
@@ -515,7 +516,8 @@ window.addEventListener("load", function () {
 
     if (!gameOver) {
       requestAnimationFrame(animate);
-    }else{
+    }
+    else{
       document.location.href='/client';
     }
   }
