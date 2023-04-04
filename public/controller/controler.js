@@ -1,4 +1,7 @@
 window.addEventListener("load", function () {
+  var audio = new Audio("./audio/mi.mp3");
+  audio.loop = true;
+  var hurtaudio = new Audio("./audio/kit.wav");
   const canvas = document.getElementById("canvas1");
   const ctx = canvas.getContext("2d");
   canvas.width = 1400;
@@ -75,7 +78,7 @@ window.addEventListener("load", function () {
       this.height = 200;
       this.x = 100;
       this.y = this.gameHeight - this.height;
-      this.image = document.getElementById("playerImage");
+      this.image = document.getElementById("playerImg");
       this.frameX = 0;
       this.maxFrame = 8;
       this.frameY = 0;
@@ -134,10 +137,11 @@ window.addEventListener("load", function () {
               //lives logical
               lives--;
               this.canCollide = false;
-              this.image = document.getElementById("playerImage2");
+              this.image = document.getElementById("playerImg2");
+              hurtaudio.play();
               setTimeout(() => {
                 this.canCollide = true;
-                this.image = document.getElementById("playerImage");
+                this.image = document.getElementById("playerImg");
               }, 1500);
             } else {
               gameOver = true;
@@ -324,7 +328,7 @@ window.addEventListener("load", function () {
     constructor(gameWidth, gameHeight) {
       this.gameWidth = gameWidth;
       this.gameHeight = gameHeight;
-      this.image = document.getElementById("backgroundImage");
+      this.image = document.getElementById("backgroundImg");
       this.x = 0;
       this.y = 0;
       this.width = 2400;
@@ -358,7 +362,7 @@ window.addEventListener("load", function () {
       this.gameHeight = gameHeight;
       this.width = 160;
       this.height = 119;
-      this.image = document.getElementById("enemyImage");
+      this.image = document.getElementById("enemyImg");
       this.x = this.gameWidth;
       this.y = this.gameHeight - this.height;
       this.frameX = 0;

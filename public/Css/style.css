@@ -29,7 +29,7 @@ h3 {
     transform: translate(-50%,-50%);
     border: 5px solid white;
 }
-#playerImg, #backgroundImg, #enemyImg{
+#playerImg, #backgroundImg, #enemyImg, #playerImg2{
     display: none;
 }
 
