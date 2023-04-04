@@ -1,6 +1,6 @@
 window.addEventListener("load", function () {
   const canvas = document.getElementById("canvas1");
-  var audio = new Audio("audio/mi.mp3");
+  var audio = new Audio('audio/mi.mp3');
   audio.loop = true;
   var hurtaudio = new Audio("audio/kit.wav");
   const ctx = canvas.getContext("2d");
