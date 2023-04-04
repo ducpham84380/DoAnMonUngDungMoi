@@ -1,8 +1,8 @@
 window.addEventListener("load", function () {
-  var audio = new Audio("./audio/mi.mp3");
-  audio.loop = true;
-  var hurtaudio = new Audio("./audio/kit.wav");
   const canvas = document.getElementById("canvas1");
+  var audio = new Audio("audio/mi.mp3");
+  audio.loop = true;
+  var hurtaudio = new Audio("audio/kit.wav");
   const ctx = canvas.getContext("2d");
   canvas.width = 1400;
   canvas.height = 700;
@@ -521,9 +521,9 @@ window.addEventListener("load", function () {
     if (!gameOver) {
       requestAnimationFrame(animate);
     }
-    else{
-      document.location.href='/client';
-    }
+    // else{
+    //   document.location.href='/client';
+    // }
   }
   animate(0);
 
