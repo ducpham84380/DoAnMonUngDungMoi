@@ -8,6 +8,7 @@ module.exports = function(app){
         res.render("game", {content:"./game.ejs"});
     });
 
+    
     app.post("/game/newPlayer", function(req, res){
         console.log("Post register");
         console.log( req.body );
@@ -16,6 +17,7 @@ module.exports = function(app){
             "$or": [{"NamePlayer":req.body.NamePlayer}]
         }, function(err, data){
             if(data.length==0){
+                //luu nguoi choi moi
                 var newPlayer = Player({
                     NamePlayer: req.body.NamePlayer,
                     ID:req.body.Id,
