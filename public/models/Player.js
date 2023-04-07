@@ -6,3 +6,4 @@ const playerSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Player", playerSchema);
+// table player
