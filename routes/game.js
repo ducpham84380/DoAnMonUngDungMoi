@@ -36,5 +36,21 @@ module.exports = function(app){
             }
         });
     });
+
+    app.post("/game/update", function(req, res){
+        console.log( req.body );
+        Player.findOneAndUpdate(req.body.NamePlayer, {
+            NamePlayer: req.body.NamePlayer,
+            Point:req.body.Point,
+        }, function(err){
+            if(err){
+                res.json({kq:0, errMsg:err});
+                console.log(err);
+            }else{
+                console.log("successfully");
+                res.json({kq:1, errMsg:"Upload successfully."});
+            }
+        });
+    });
 }
 
