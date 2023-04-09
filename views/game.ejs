@@ -14,11 +14,15 @@
 <body id="body1">
     <div id="background">
         <div id="bnt-Box">
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">@</span>
-                <input type="text" id="namePlayer"class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+            <label id="lab" for="exampleInputEmail1">New Player</label>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Name player</label>
+                <input type="email" class="form-control" id="namePlayer" aria-describedby="emailHelp" placeholder="Enter name">
             </div>
-            
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            </div>
             <nav class="nav nav-pills nav-fill">
                 <a class="game-button red" href="client">Back</a>
                 <a id="btnStar" class="game-button green" aria-current="page" >Play</a>
