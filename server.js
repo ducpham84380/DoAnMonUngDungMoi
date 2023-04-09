@@ -86,6 +86,7 @@ fs.readFile("./config.json", "utf8", function(err, data){
     require("./routes/index")(app);
     require("./routes/viewPoint")(app);
     require("./routes/pointList")(app);
+    require("./routes/againGame")(app);
 });
 
 

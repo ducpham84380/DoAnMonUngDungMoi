@@ -108,7 +108,7 @@ module.exports = function(app){
                                     Active: player.Active, 
                                     RegisterDate: Date.now()}, privateKey, {expiresIn:Math.floor(Date.now()/1000)+60*60*24*30*3}, function(err2, token){
                                  if(err2){
-                                    res.json( {"kq":false, "errMsg":"token err"});
+                                    res.json( {kq:0, errMsg:"token err"});
                                  }else{
                                      // Save Token
                                       var currenToken = Token({

@@ -38,4 +38,24 @@ $(document).ready(function(){
             });
         }
     });
+
+    $("#btnAgain").click(function(){
+        if(qs["name"].length==0 || qs["score"].length==0 ){
+            alert("lỗi");
+        }else{
+            $.post(url + "/game/update", {
+                    NamePlayer:qs["name"],
+                    Point:qs["score"],
+                    Id:qs["Id"]
+            }, function(data){
+                if(data.kq == 1){
+                    alert(data.errMsg);
+                    document.location.href='/index?name='+qs["name"]+'&Id='+qs["Id"];
+                }else{
+                    alert(data.errMsg);
+                }
+            });
+        }
+    });
+
 })
