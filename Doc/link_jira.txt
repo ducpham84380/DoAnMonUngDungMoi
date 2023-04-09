@@ -1,0 +1,3 @@
+link JiRa: https://duc843801.atlassian.net/jira/software/projects/NGDNGMGT/boards/3
+
+link github: https://github.com/ducpham84380/DoAnMonUngDungMoi.git

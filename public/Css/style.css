@@ -74,6 +74,49 @@ h3 {
   transform: translateX(-50%);
 }
 
+#point, #name{
+  font-size: 30px;
+  font-family: 'Georgia', serif;
+  font-weight: bold;
+  color: #fff;
+}
+
+#bnt-Box2{
+  width: 400px;
+  margin-left: 950px;
+  position: absolute;
+  padding: 20px;
+  top: 25%;
+}
+
+#list_point {
+  font-family: 'Georgia', serif;
+  text-align: center;
+  font-weight: bold;
+  color: #000;
+  font-size: 20px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#list_point td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#list_point tr:nth-child(even){background-color: #f2f2f2;}
+
+#list_point tr:hover {background-color: #ddd;}
+
+#list_point th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  margin-left: 5px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}
+
 .game-button {
   position: relative;
   top: 0;
@@ -158,3 +201,4 @@ h3 {
   top:2px;
   box-shadow: 0 4px 0 #348628, 0 6px 1px 1px rgba(0,0,0,.3), 0 8px 0 5px #2a6d20, 0 10px 0 5px #39822e, 0 13px 0 5px #1d4c16, 0 13px 1px 6px rgba(0,0,0,.3);
 }
+

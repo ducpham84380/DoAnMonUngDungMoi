@@ -1,16 +1,21 @@
 window.addEventListener("load", function () {
   const canvas = document.getElementById("canvas1");
-  var audio = new Audio('audio/passwordinfinity.mp3');
-  audio.loop = true;
+  var audio = new Audio('audio/mi.mp3');
   var hurtaudio = new Audio("audio/kit.wav");
+
   const ctx = canvas.getContext("2d");
+
   canvas.width = 1400;
   canvas.height = 700;
+
   let enemies = [];
   let score = 0;
   let gameOver = false;
   let lives = 3;
+
   const fullScreenButton = this.document.getElementById("fullScreenButton");
+
+  audio.loop = true;
 
   class InputHandler {
     constructor() {
@@ -522,9 +527,10 @@ window.addEventListener("load", function () {
       audio.play();
       requestAnimationFrame(animate);
     }
-    // else{
-    //   document.location.href='/client';
-    // }
+    else{
+      var x  = document.location.search.substr(1);
+      document.location.href='/viewPoint?'+x+'&score='+score;
+    }
   }
   animate(0);
 

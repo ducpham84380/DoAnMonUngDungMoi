@@ -39,8 +39,9 @@ module.exports = function(app){
 
     app.post("/game/update", function(req, res){
         console.log( req.body );
-        Player.findOneAndUpdate(req.body.NamePlayer, {
+        Player.findOneAndUpdate({NamePlayer:req.body.NamePlayer, ID:req.body.Id}, {
             NamePlayer: req.body.NamePlayer,
+            ID:req.body.Id,
             Point:req.body.Point,
         }, function(err){
             if(err){
@@ -49,6 +50,16 @@ module.exports = function(app){
             }else{
                 console.log("successfully");
                 res.json({kq:1, errMsg:"Upload successfully."});
+            }
+        });
+    });
+
+    app.post("/game/pointList", function(req, res){
+        Player.find(function(err, data){
+            if(err){
+                res.json({kq:0, errMsg:err});
+            }else{
+                res.json({kq:1, PointList:data});
             }
         });
     });

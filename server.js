@@ -33,16 +33,16 @@ io.on('connection', (socket)=>{
 
     // 4. Gửi cho tất cả
     //io.sockets.emit('name', data);
-
-    socket.on('client', (data)=>{
+    socket.on('point', (data)=>{
         //socket.emit('server', data);
         //socket.broadcast.emit('server', data);
         //io.sockets.emit('server', data);
-
+        var points = data;
         // dữ liệu của data lúc này là object
-        io.to(data.radio).emit('server', {key: data.key, id: socket.id});
-        socket.emit('server-only', {key: data.key, id: socket.id});
-    })
+        console.log(points);
+        socket.emit('point-only', {point:points});
+    });
+
 
     // ngắt kết
     socket.on('disconnect', ()=>{
@@ -50,7 +50,7 @@ io.on('connection', (socket)=>{
 
         // Xóa người logout
         array.splice(array.indexOf(socket.id), 1)
-    })
+    });
 
     // Gửi danh sách ra cho tất cả
     io.sockets.emit('online_list', array);
@@ -84,6 +84,8 @@ fs.readFile("./config.json", "utf8", function(err, data){
     require("./routes/game")(app);
     require("./routes/client")(app);
     require("./routes/index")(app);
+    require("./routes/viewPoint")(app);
+    require("./routes/pointList")(app);
 });
 
 

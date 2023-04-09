@@ -27,7 +27,8 @@ $(document).ready(function(){
         }else{
             $.post(url + "/game/update", {
                     NamePlayer:qs["name"],
-                    Point:qs["score"]    
+                    Point:qs["score"],
+                    Id:qs["Id"]
             }, function(data){
                 if(data.kq == 1){
                     alert(data.errMsg);
