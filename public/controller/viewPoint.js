@@ -32,6 +32,7 @@ $(document).ready(function(){
             }, function(data){
                 if(data.kq == 1){
                     alert(data.errMsg);
+                    document.location.href='/client';
                 }else{
                     alert(data.errMsg);
                 }

@@ -65,9 +65,7 @@ module.exports = function(app){
         }, function(err){
             if(err){
                 res.json({kq:0, errMsg:err});
-                console.log(err);
             }else{
-                console.log("successfully");
                 res.json({kq:1, errMsg:"Upload successfully."});
             }
         });
